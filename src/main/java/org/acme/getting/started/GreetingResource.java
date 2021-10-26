@@ -2,6 +2,7 @@ package org.acme.getting.started;
 
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.runtime.QuarkusPrincipal;
+import io.smallrye.mutiny.Uni;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class GreetingResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @RunAs(username = "vince", roles = {"user"})
-    public String hello() {
+    public Uni<String> hello() {
         log.info("Processing request " + getInfo());
 
         for (int i = 0; i < 10; i++) {
@@ -40,7 +41,7 @@ public class GreetingResource {
             e.printStackTrace();
         }
         log.info("returning from jaxrs endpoint " + getInfo());
-        return "Hello RESTEasy";
+        return Uni.createFrom().item("Hello RESTEasy");
     }
 
     String getSecurityIdentity() {
